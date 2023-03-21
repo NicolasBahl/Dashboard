@@ -1,0 +1,35 @@
+{
+    "name": "Current Weather",
+    "service": "openweathermap",
+    "metrics": [
+        {
+            "name": "Weather",
+            "type": "text",
+            "value": "Sunny"
+        },
+        {
+            "name": "Temperature",
+            "type": "numeric",
+            "value": "13"
+        }
+    ]
+}
+
+
+
+{
+    [
+        {
+            "name": "currentWeather",
+            "params": {
+                "city": "strasbourg"
+            }
+        },
+        {
+            "name": "mairie",
+            "params": {
+                "name": "hautepierre"
+            }
+        }
+    ]
+}

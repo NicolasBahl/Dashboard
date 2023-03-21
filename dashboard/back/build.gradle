@@ -1,0 +1,65 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+	id 'war'
+	id "com.github.node-gradle.node" version "3.5.0"
+}
+
+group = 'com.kirikou'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	implementation 'org.springframework.security:spring-security-core:5.7.3'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.security:spring-security-crypto:5.7.3'
+	implementation 'com.google.api-client:google-api-client:2.0.0'
+	implementation 'com.google.auth:google-auth-library-oauth2-http:1.12.1'
+	implementation 'com.google.apis:google-api-services-youtubeAnalytics:v2-rev20210510-2.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.5'
+	compileOnly 'org.projectlombok:lombok'
+	implementation 'com.auth0:java-jwt:4.2.1'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+
+tasks.register('processFrontendResources', Copy) {
+	// Directory containing the artifacts in the frontend project
+	def frontendBuildDir = file("${project(':front').buildDir}")
+	// Directory where the frontend artifacts must be copied to be packaged alltogether with the backend by the 'war'
+	// plugin.
+	def frontendResourcesDir = file("${project.buildDir}/resources/main/public")
+
+	group 'Frontend'
+	description 'Process frontend resources'
+	dependsOn project(':front').tasks.named('assembleFrontend')
+
+	from frontendBuildDir
+	into frontendResourcesDir
+}
+
+tasks.named('processResources') {
+	dependsOn tasks.named('processFrontendResources')
+}

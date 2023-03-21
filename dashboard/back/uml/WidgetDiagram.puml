@@ -1,0 +1,57 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class Widget {
+- name: String
+- service: String
+- metrics: List<Metric<?>>
+# httpClient: HttpClient
+
+# Widget()
++ getName(): String
++ setName(name: String)
++ getServices(): String
++ setServices(services: String)
++ getMetrics(): List<Metric<?>>
++ setMetrics(metrics: List<Metrics<?>>)
+}
+
+class CurrentWeatherWidget extends Widget {
++ CurrentWeatherWidget(city: String)
+}
+
+class NewsFeedWidget extends Widget {
++ NewsFeedWidget(countryCode: String, category: String)
+}
+
+class WaitingTimeWidget extends Widget {
++ WaitingTimeWidget()
+}
+
+class HttpClient {
+- client: WebClient
+- mapper: ObjectMapper
+
++ HttpClient()
++ get(url: String): JsonNode
+}
+
+class Metric<?> {
+- name: String
+- type: String
+- value: T
+
++ Metric(name: String, type: String, value: T)
++ getName(): String
++ setName(name: String)
++ getType(): String
++ setType(type: String)
++ getValue(): T
++ setValue(value: T)
++ display()
+}
+
+Widget *-- HttpClient : has
+Widget *-- Metric : has
+
+@enduml
